@@ -1,0 +1,29 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+
+\begin{document}
+
+\paragraph{Problem 1}
+ \[
+    \frac{dy}{dt} = \alpha y, y_{0} = 1, \alpha = 0.01, h=0.2, t_i = ih
+ \]
+ 
+ \subparagraph{Using Runge-kutta}
+ \[
+    y_{i+1} = y_i + hf(t_i+\frac{h}{2}, y_i + \frac{h}{2} f(t_i, y_i))
+ \]
+ 
+ \paragraph{Problem 2}
+ \[
+    \frac{dy}{dt} = \alpha y\left(1 - \frac{y}{C}\right) , y_{0} = 1, \alpha = 0.01, h = 0.2, t_i = ih, C = 10
+ \]
+ 
+ \subparagraph{Using Runge-kutta}
+ \[
+    y_{i+1} = y_i + hf(t_i+\frac{h}{2}, y_i + \frac{h}{2} f(t_i, y_i))
+ \]
+\end{document}
