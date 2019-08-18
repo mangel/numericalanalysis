@@ -4,15 +4,16 @@
 \usepackage{amsthm}
 \usepackage{amssymb}
 \usepackage{amsfonts}
+\usepackage{longtable}
 
-\title{Mock-exam}
+\title{Mock exam}
 \author{Miguel A. Gomez B.}
 
 \begin{document}
 
 \maketitle
 
-\paragraph{1.} For each IVP problem, verify that y solves the problem and describe by euler the approximate solution.
+\paragraph{1.} For each IVP problem, verify that $y$ solves the problem and describe by euler the approximate solution.
 
 \paragraph{a} $y'+ 4y =0$, $y(0)=3$, $y(t) = 3e^{-4t}$
 
@@ -42,7 +43,23 @@ Which is correct.
     y_{n+1} = y_n + hf(t_n,y_n)
 \]
 
-Results attached on the excel file.
+the following table contains the results:
+
+\begin{table}[ht]
+  \begin{center}
+    \label{tab:1.a}
+    \begin{tabular}{l|c|r|r} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+      $n$&$t_n$&$y_n$&$f(t_n,y_n)$\\
+      \hline
+        0&0&3&-12\\
+        1&0.2&0.6&-5.39195\\
+        2&0.4&-0.47839&-2.42276\\
+        3&0.6&-0.96294&-1.08862\\
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\newpage
 
 \paragraph{b} $y' = \frac{t^{2}}{y}$, $y(0)=1$, $y(t) = \sqrt{1 + \frac{2}{3}t^{3}}$
 
@@ -72,7 +89,23 @@ Which is correct.
     y_{n+1} = y_n + hf(t_n,y_n)
 \]
 
-Results attached on the excel file.
+the following table contains the results:
+
+\begin{table}[ht]
+  \begin{center}
+    \label{tab:1.b}
+    \begin{tabular}{l|c|r|r} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+      $n$&$t_n$&$y_n$&$f(t_n,y_n)$\\
+      \hline
+        0&0&1&0\\
+        1&0.2&1&0.03989376\\
+        2&0.4&1.007979&0.15669215\\
+        3&0.6&1.039317&0.33658092\\
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\newpage
 
 \paragraph{c} $ty' - y = t^{2}$, $y(1)=4$, $y(t)=3t + t^{2}$
 
@@ -103,34 +136,70 @@ Which is correct.
     y_{n+1} = y_n + hf(t_n,y_n)
 \]
 
-Results attached on the excel file.
+the following table contains the results:
+
+\begin{table}[ht]
+  \begin{center}
+    \label{tab:1.c}
+    \begin{tabular}{l|c|r|r} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+      $n$&$t_n$&$y_n$&$f(t_n,y_n)$\\
+      \hline
+        1&0.2&4&3.4\\
+        2&0.4&4.68&3.8\\
+        3&0.6&5.44&4.2\\
+        4&0.8&6.28&4.6\\
+    \end{tabular}
+  \end{center}
+\end{table}
 
 \newpage
 
-\paragraph{2.} Use Euler's method $h = \frac{1}{4}$ to compute approximate values of $y(1)$ for each of the following initial value problems. Give a table of $(t_k, y_k)$ pairs.
+\paragraph{2.} Compare  Euler's and second order Taylor methods with $h = \frac{1}{4}$ to compute approximate values of $y(1)$ for each of the following initial value problems. Give a table of $(t_k, y_k)$ pairs.
 
-\paragraph{a} $y' = y(1-y)$, $y(0)=1$
+\paragraph{a} $y' = y(1-y)$, $y(0)=1$\newline
+To use second order Taylor, we need to find the second derivative with respect of $t$:
+
+\[
+    y'' = 1 - 2y
+\]
+
+by applying both methods we get the following results:
 
 \begin{table}[ht]
   \begin{center}
     \label{tab:table 2.a}
-    \begin{tabular}{l|c|r|r} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
-      $n$ & $t_{n}$ & $y_{n}$ & $f(t_{n},y_{n})$\\
-      \hline
-        0&0&1&0\\
-        1&0.25&1&0\\
-        2&0.5&1&0\\
-        3&0.75&1&0\\
-        4&1&1&0\\
-        5&1.25&1&0\\
-        6&1.5&1&0\\
-        7&1.75&1&0\\
-        8&2&1&0\\
-        9&2.25&1&0\\
-        10&2.5&1&0\\
+    \begin{tabular}{|l|c|r|} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+    \hline
+     &\textbf{Euler}&\textbf{Second order Taylor}\\
+    $t_n$&$y_n$&$y_n$\\
+    \hline
+    0&1&1\\
+    0.25&1&0.96875\\
+    0.5&1&0.947021484\\
+    0.75&1&0.93162559\\
+    1&1&0.920573828\\
+    1.25&1&0.912567378\\
+    1.5&1&0.906728956\\
+    1.75&1&0.902451285\\
+    2&1&0.899306321\\
+    2.25&1&0.896988291\\
+    2.5&1&0.895276597\\
+    2.75&1&0.894010913\\
+    3&1&0.893074081\\
+    3.25&1&0.892380143\\
+    3.5&1&0.89186584\\
+    3.75&1&0.891484516\\
+    4&1&0.891201702\\
+    4.25&1&0.890991903\\
+    4.5&1&0.890836242\\
+    4.75&1&0.890720735\\
+    5&1&0.890635016\\
+    \hline
     \end{tabular}
   \end{center}
 \end{table}
+
+\newpage
 
 \paragraph{b} $ty' = y\sin{t}$, $y(0)=2$
 \subparagraph{} The equation can be rewritten as:
@@ -138,50 +207,88 @@ Results attached on the excel file.
     y' = \frac{y\sin{t}}{t}
 \]
 
+And to use second order Taylor, we need to find the
+second derivative with respect of t:
+
+\[
+    y'' =  \frac{ y' \sin{(t)} -\cos{(t)}}{t} - \frac{y\sin{(t)}}{t^2}
+\]
+
 \begin{table}[ht]
   \begin{center}
-    \label{tab:2.b}
-    \begin{tabular}{l|c|r|r} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
-      $n$ & $t_{n}$ & $y_{n}$ & $f(t_{n},y_{n})$\\
-      \hline
-        0&0&2&NO EXISTE\\
-        1&0.25&2&1.979231674\\
-        2&0.5&2.49480792&1.917702154\\
-        3&0.75&2.97423346&2.267410368\\
-        4&1&3.54108605&2.502731156\\
-        5&1.25&4.16676884&2.688348957\\
-        6&1.5&4.83885608&2.770887351\\
-        7&1.75&5.53157792&2.720780788\\
-        8&2&6.21177311&2.514924782\\
-        9&2.25&6.84050431&2.148095184\\
-        10&2.5&7.3775281&1.637540512\\
+    \label{tab:table 2.b}
+    \begin{tabular}{|l|c|r|} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+    \hline
+     &\textbf{Euler}&\textbf{Second order Taylor}\\
+    $t_n$&$y_n$&$y_n$\\
+    \hline
+    0&2&2\\
+    0.25&2&2\\
+    0.5&2.49480792&2.251295272\\
+    0.75&2.97423346&2.601031357\\
+    1&3.54108605&3.020058394\\
+    1.25&4.16676884&3.489739458\\
+    1.5&4.83885608&3.990376857\\
+    1.75&5.53157792&4.498198696\\
+    2&6.21177311&4.986261191\\
+    2.25&6.84050431&5.426966153\\
+    2.5&7.3775281&5.795464305\\
+    2.75&7.78691323&6.073008809\\
+    3&8.04288729&6.249396608\\
+    3.25&8.1344614&6.323906695\\
+    3.5&8.06752284&6.304603581\\
+    3.75&7.86370622&6.206336666\\
+    4&7.55630062&6.048056975\\
+    4.25&7.18434609&5.85011344\\
+    4.5&6.78653382&5.632024905\\
+    4.75&6.39637189&5.410967685\\
+    5&6.03943851&5.2009859\\
+    \hline
     \end{tabular}
   \end{center}
 \end{table}
 
 \newpage
 
-\paragraph{c} $y' = y(1+e^{2t})$, $y(0)=1$
+\paragraph{c} $y' = y(1+e^{2t})$, $y(0)=1$. To use second order Taylor, we need to find the
+second derivative with respect of t:
+
+\[
+    y'' =  y' + y'e^{t} + ye^{t}
+\]
 
 \begin{table}[ht]
   \begin{center}
-    \label{tab:2.c}
-    \begin{tabular}{l|c|r|r} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
-      $n$ & $t_{n}$ & $y_{n}$ & $f(t_{n},y_{n})$\\
-      \hline
-        0&0&1&2\\
-        1&0.25&1.5&3.973081906\\
-        2&0.5&2.49327048&9.270682306\\
-        3&0.75&4.81094105&26.37208299\\
-        4&1&11.4039618&95.66847529\\
-        5&1.25&35.3210806&465.619932\\
-        6&1.5&151.726064&3199.225517\\
-        7&1.75&951.532443&32461.95934\\
-        8&2&9067.02228&504109.665\\
-        9&2.25&135094.439&12295908.25\\
-        10&2.5&3209071.5&479477510.7\\
+    \label{tab:table 2.c}
+    \begin{tabular}{|l|c|r|} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+    \hline
+     &\textbf{Euler}&\textbf{Second order Taylor}\\
+    $t_n$&$y_n$&$y_n$\\
+    \hline
+    0&1&1\\
+    0.25&1.5&1.8125\\
+    0.5&2.49327048&3.174121281\\
+    0.75&4.81094105&5.505307351\\
+    1&11.4039618&9.62422594\\
+    1.25&35.3210806&17.21324543\\
+    1.5&151.726064&31.95453893\\
+    1.75&951.532443&62.49749471\\
+    2&9067.02228&130.8520222\\
+    2.25&135094.439&298.3238601\\
+    2.5&3209071.5&753.9433018\\
+    2.75&123078449&2150.747151\\
+    3&7682923949&7048.455447\\
+    3.25&7.8448E+11&26979.09032\\
+    3.5&1.3143E+14&122434.6756\\
+    3.75&3.6196E+16&667584.3523\\
+    4&1.6406E+19&4424631.876\\
+    4.25&1.2247E+22&36004622.09\\
+    4.5&1.5063E+25&362771255.3\\
+    4.75&3.0534E+28&4558091272\\
+    5&1.0202E+32&71837960480\\
+    \hline
     \end{tabular}
   \end{center}
 \end{table}
- 
+
 \end{document}
