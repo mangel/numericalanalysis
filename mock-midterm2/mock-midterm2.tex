@@ -1,0 +1,36 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, mexico]{babel}
+
+\title{Mock Midterm	2}
+\author{Miguel A. Gomez B.}
+
+\begin{document}
+	\maketitle
+	
+\paragraph{1} List the matrix form of the numerical solver techniques for solving the heat diffusion equation.
+\paragraph{Solution}
+\textbf{The explicit solver}:
+$$ \overrightarrow{\rm U}^{n+1} = \left(I + A\frac{\Delta t a}{h^2}\right)^{n+1} \cdot \overrightarrow{\rm U}_0$$
+given that:
+\begin{itemize}
+	\item $I$ is the identity matrix.
+	\item $A$ is another matrix...
+	\item $\Delta t$ is the choosen parameter for time.
+	\item $h$ is another parameter
+	\item $\overrightarrow{\rm U}_0$ is an initial solution of the ODE.
+\end{itemize}
+\paragraph{2} Write a program to use the explicit method to solve the diffusion equation
+\begin{align*}
+	u_t &= u_{xx}, t > 0, 0 < x < 1;\\
+	u(0, t) &= 0; \\
+	u(1, t) &= 0; \\
+	u(x, 0) &= \sin{(\pi x)}.
+\end{align*}
+which has the exact solution:
+$$u(x, t) = e^{\pi^2 t} \sin{(\pi x)}$$
+(the student should check that this is indeed the exact solution). Use $h^{-1} = 4, 8, \dots, \frac{1}{1024}$, and take $\delta t$ as large as possible to maintain stability. Confirm that the approximate solution is as accurate as the theory predicts. Compute out to $t = 1$.
+\paragraph{3} Please load the CVS attached to the midterm and perform constant, linear, cuadratic and cubic regression ¿What regression fits the bests?
+\end{document}
