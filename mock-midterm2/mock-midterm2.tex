@@ -3,6 +3,14 @@
 \usepackage{amsmath}
 \usepackage[utf8]{inputenc}
 \usepackage[spanish, mexico]{babel}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{listings}
+
+\lstset{
+	columns=fullflexible,
+	frame=single,
+	breaklines=true,
+}
 
 \title{Mock Midterm	2}
 \author{Miguel A. Gomez B.}
@@ -12,16 +20,21 @@
 	
 \paragraph{1} List the matrix form of the numerical solver techniques for solving the heat diffusion equation.
 \paragraph{Solution}
-\textbf{The explicit solver}:
-$$ \overrightarrow{\rm U}^{n+1} = \left(I + A\frac{\Delta t a}{h^2}\right)^{n+1} \cdot \overrightarrow{\rm U}_0$$
-given that:
+Given that:
 \begin{itemize}
 	\item $I$ is the identity matrix.
-	\item $A$ is another matrix...
-	\item $\Delta t$ is the choosen parameter for time.
-	\item $h$ is another parameter
+	\item $A$ \textbf{is another matrix...}
+	\item $\Delta t$ is the simulation parameter for time.
+	\item $a$ is the diffusion coefficient.
+	\item $h$ is the simulation parameter for an one-dimensional space rod.
 	\item $\overrightarrow{\rm U}_0$ is an initial solution of the ODE.
 \end{itemize}
+\textbf{The explicit solver:}
+$$ \overrightarrow{\rm U}^{n+1} = \left(I + A\frac{\Delta t a}{h^2}\right)^{n+1} \cdot \overrightarrow{\rm U}_0$$
+\textbf{The implicit solver:}
+$$\overrightarrow{\rm U}^{n+1} = \left(I - A\frac{\Delta t a}{h^2}\right)^{-1} \cdot \overrightarrow{\rm U}_{0}$$
+\textbf{The Crank-Nicolson solver:}
+$$\overrightarrow{\rm U}^{n+1} = \left[\left(I + A\frac{\Delta t a}{h^2}\right) \cdot \left(I - A \frac{\Delta t a}{h^2}\right)^{-1} \right]^{n+1} \cdot \overrightarrow{\rm U}_{0}$$
 \paragraph{2} Write a program to use the explicit method to solve the diffusion equation
 \begin{align*}
 	u_t &= u_{xx}, t > 0, 0 < x < 1;\\
@@ -30,7 +43,49 @@ given that:
 	u(x, 0) &= \sin{(\pi x)}.
 \end{align*}
 which has the exact solution:
-$$u(x, t) = e^{\pi^2 t} \sin{(\pi x)}$$
+$$u(x, t) = e^{-\pi^2 t} \sin{(\pi x)}$$
 (the student should check that this is indeed the exact solution). Use $h^{-1} = 4, 8, \dots, \frac{1}{1024}$, and take $\delta t$ as large as possible to maintain stability. Confirm that the approximate solution is as accurate as the theory predicts. Compute out to $t = 1$.
+\paragraph{Solution} We use $x = \frac{1}{16} = 0.0625$. Testing on the solution given $(x,0)$ we obtain on the exact solution formula:
+\begin{align*}
+	U(0.0625,0) &= e^{-\pi^2 \cdot 0} \sin{(\pi(0.0625)}\\
+	&= \sin{(\pi(0.0625))}\\
+	&\approx 0.19509032201612825 
+\end{align*}
+Checking on the initial solution we get:
+\begin{align*}
+	U(0.0625,0) &= \sin{(\pi(0.0625))}\\
+	&= \sin{(\pi(0.0625))}\\
+	&\approx 0.19509032201612825 
+\end{align*}
+which implies it is actually the exact solution. To solve this problem we'll use the Crank-Nicolson solver with a modification to obtain the best solution given that $\Delta t =  \frac{1}{64} = 0.015625$. To test the which parameter will be the best fit to the original equation we will use:
+
+$$\sum_{i=0}^{x^{-1}}$$
+\begin{lstlisting}[language=python]
+import numpy as np
+import numpy.linalg as la
+from pprint import pprint
+
+def crank_nicolson(I, dt, a, h, A, n, u_0):
+	return np.dot(la.matrix_power(np.matmul(I + (dt*a/h**2)*A ,la.inv(I - A*(a*dt/h**2))), n), u_0)
+
+# Diffusion coefficient
+a=np.pi**-2
+# Simulation parameters
+dt=1/64
+h=1/4
+
+b = 4
+
+# Diagonal matrix with -2 in its diagonal.
+A = np.diag([-2]*b-1) + np.diag([1]*b-2,-1) + np.diag([1]*b-1,1)
+
+u_0 = np.sin([np.pi*h*i for i in range(1,b)])
+
+I = np.diag([1]*(b-1))
+
+crank_nicolson = crank_nicolson(I, dt, a, h, A, 2, u_0)
+
+pprint(crank_nicolson)
+\end{lstlisting}
 \paragraph{3} Please load the CVS attached to the midterm and perform constant, linear, cuadratic and cubic regression ¿What regression fits the bests?
 \end{document}
