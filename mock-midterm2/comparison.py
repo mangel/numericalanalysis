@@ -21,7 +21,7 @@ iteration = 1
 for iteration in range(9, 10):
 	den = 2**(iteration+1)
 	h = 1/den
-	dt = ((h**2)/(2*a))*0.001
+	dt = ((h**2)/(2*a))*0.999
 	print("---------------------Iteration ", iteration, ": dt=", dt,"h=1/",den)
 	exact = np.asarray([exact_solution(den*dt, h*i) for i in range(1,den)])
 	I = np.diag([1]*(den-1))

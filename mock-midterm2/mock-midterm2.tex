@@ -2,9 +2,10 @@
 
 \usepackage{amsmath}
 \usepackage[utf8]{inputenc}
-\usepackage[spanish, mexico]{babel}
 \usepackage[margin=0.5in]{geometry}
 \usepackage{listings}
+\usepackage{graphicx}
+\usepackage{subcaption}
 
 \lstset{
 	columns=fullflexible,
@@ -17,17 +18,16 @@
 
 \begin{document}
 	\maketitle
-	
 \paragraph{1} List the matrix form of the numerical solver techniques for solving the heat diffusion equation.
 \paragraph{Solution}
 Given that:
 \begin{itemize}
 	\item $I$ is the identity matrix.
-	\item $A$ \textbf{is another matrix...}
+	\item $A$ is the matrix that contains the generalization of the factors of the linear equations.
 	\item $\Delta t$ is the simulation parameter for time.
-	\item $a$ is the diffusion coefficient.
+	\item $a$ is the diffusion coefficient of the material.
 	\item $h$ is the simulation parameter for an one-dimensional space rod.
-	\item $\overrightarrow{\rm U}_0$ is an initial solution of the ODE.
+	\item $\overrightarrow{\rm U}_0$ is the initial solution of the ODE.
 \end{itemize}
 \textbf{The explicit solver:}
 $$ \overrightarrow{\rm U}^{n+1} = \left(I + A\frac{\Delta t a}{h^2}\right)^{n+1} \cdot \overrightarrow{\rm U}_0$$
@@ -57,16 +57,18 @@ Checking on the initial solution we get:
 	&= \sin{(\pi(0.0625))}\\
 	&\approx 0.19509032201612825 
 \end{align*}
-which implies it is actually the exact solution. To solve this problem we'll use the Crank-Nicolson solver with a modification to obtain the best solution given that $\Delta t =  \frac{1}{64} = 0.015625$. To test the which parameter will be the best fit to the original equation we will use:
-
-$$\sum_{i=0}^{x^{-1}}$$
+which implies it is actually the exact solution. To solve this problem we'll use the Explicit method solver with a modification to test each time an smaller $h$ to explore which would be the best solution.
 \begin{lstlisting}[language=python]
 import numpy as np
 import numpy.linalg as la
 from pprint import pprint
+import matplotlib.pyplot as plt
 
-def crank_nicolson(I, dt, a, h, A, n, u_0):
-	return np.dot(la.matrix_power(np.matmul(I + (dt*a/h**2)*A ,la.inv(I - A*(a*dt/h**2))), n), u_0)
+def explicit(I, dt, a, h, A, n, u_0):
+	return np.dot(la.matrix_power(I + (dt*a/h**2)*A, n), u_0)
+
+def exact_solution(t, x):
+	return np.e**(-np.pi**(2)*t)*np.sin(np.pi*x)
 
 # Diffusion coefficient
 a=np.pi**-2
@@ -74,18 +76,79 @@ a=np.pi**-2
 dt=1/64
 h=1/4
 
-b = 4
+den = 4
+iteration = 1
 
-# Diagonal matrix with -2 in its diagonal.
-A = np.diag([-2]*b-1) + np.diag([1]*b-2,-1) + np.diag([1]*b-1,1)
+for iteration in range(9, 10):
+	den = 2**(iteration+1)
+	h = 1/den
+	dt = ((h**2)/(2*a))*0.001
+	print("---------------------Iteration ", iteration, ": dt=", dt,"h=1/",den)
+	exact = np.asarray([exact_solution(den*dt, h*i) for i in range(1,den)])
+	I = np.diag([1]*(den-1))
+	# Diagonal matrix with -2 in its diagonal.	
+	A = np.diag([-2]*(den-1)) + np.diag([1]*(den-2),-1) + np.diag([1]*(den-2),1)
+	#Initial solution
+	u_0 = np.sin([np.pi*h*i for i in range(1,den)])
+	estimated_solution = explicit(I, dt, a, h, A, 2, u_0)
+	
+	pprint(estimated_solution)
+	pprint(exact)
+	
+	x = np.asarray([h*i for i in range(1,den)])
+	plt.plot(x, estimated_solution)
+	
+	plt.plot(x, exact)
 
-u_0 = np.sin([np.pi*h*i for i in range(1,b)])
-
-I = np.diag([1]*(b-1))
-
-crank_nicolson = crank_nicolson(I, dt, a, h, A, 2, u_0)
-
-pprint(crank_nicolson)
+plt.show()
 \end{lstlisting}
+this program restricts the values of $\Delta t$, more specifically:
+$$\Delta t \leq \frac{h^2}{2a},$$
+on the program we will use $\frac{h^2}{2a} (0.001)$ and $\frac{h^2}{2a}(0.999)$, after varying $h$ from $\frac{1}{4}, \frac{1}{8}, \frac{1}{16}, \dots,  \frac{1}{1024}$ and we obtain:
+\newpage
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=\linewidth]{1.png}
+		\caption{$\Delta t = \frac{h^2}{2a}(0.001)$.}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=\linewidth]{2.png}
+		\caption{$\Delta t = \frac{h^2}{2a} (0.999)$.}
+	\end{subfigure}
+	\caption{the dashed lines are the approximation. It is clear that is is closer to the analytical solution as $h$ tend to $\frac{1}{1024}$.}
+	\label{fig:cmp1}
+\end{figure}
+We see that the solution is closer as $h$ is smaller, if whe compare both solutions only on for $h = \frac{1}{1024}$ we now see a clear difference.
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=\linewidth]{5.png}
+		\caption{$\Delta t = \frac{h^2}{2a}(0.001)$.}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=\linewidth]{3.png}
+		\caption{$\Delta t = \frac{h^2}{2a} (0.999)$.}
+	\end{subfigure}
+	\caption{the dashed lines are the approximation. It is clear that is is closer to the analytical solution as $h$ tend to $\frac{1}{1024}$.}
+	\label{fig:cmp2}
+\end{figure}
+A closer zoom on a gives us a clear answer of which parameter is better.\newline
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.5\linewidth]{4.png}
+\end{figure}
+We can conclude that the best parameter to choose on this problem as $h$ approaches zero is $\Delta t = \frac{h^2}{2a}(0.001)$.
 \paragraph{3} Please load the CVS attached to the midterm and perform constant, linear, cuadratic and cubic regression ¿What regression fits the bests?
+\paragraph{Solution.} After performing each of the regressions we get\footnote{The data of the solution is on the excel file}:
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.5\linewidth]{6.png}
+\end{figure}
+We clealy see that the closests approximations would be the cuadratic and the cubic form, it is expected than the cubic form will perform better, which is why we compare the absolute error on both solutions, the solution with the lowest error will be a better approximation.\newline
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.5\linewidth]{7.png}
+\end{figure}
+\paragraph{} Both of solutions seem to be closer to the initial points, so we use the average to check in general wich solution is closer, for the cuadratic aproximation we get $\approx 43.32$, on the cubic form we get $\approx 36.80$. The cubic form in general is more precise
 \end{document}
