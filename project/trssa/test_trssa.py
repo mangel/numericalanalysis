@@ -1,10 +1,12 @@
 from pprint import pprint
 
-from rate.sigmoidalrate import SigmoidalRate
+from rate import SigmoidalRate
+from simulator import TimedRSSAGeneral
 
-nsim=3
+nsim=1
 
 max_time = 40
+logInterval = 1
 population_list = ["S1 = 0"]
 reaction_list = ["_ -> S1"]
 
@@ -32,3 +34,6 @@ for i in range(1, nsim+1):
     print("Loop @{}".format(i))
     cloneNextTimeList = nextTimeList_Sigmoid.copy()
     output_resultfile = "TimedRSSA_Birth_One_Sigmoid_{}.txt".format(i)
+    trssa = TimedRSSAGeneral()
+    trssa.buildSimulator(cloneNextTimeList, logInterval, population_list, reaction_list, rates_sigmoid, output_resultfile)
+    trssa.runSimulator()
